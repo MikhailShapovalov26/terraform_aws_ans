@@ -1,5 +1,5 @@
 resource "aws_security_group" "ssh_security" {
-  name = "ssh"
+  name = "${uuid()}"
 
   ingress {
     from_port   = 22
@@ -15,7 +15,7 @@ resource "aws_security_group" "ssh_security" {
   }
 }
 resource "aws_security_group" "http_security" {
-  name = "http"
+  name = "${uuid()}"
 
   ingress {
     from_port   = 80
