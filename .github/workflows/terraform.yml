@@ -56,9 +56,7 @@ jobs:
 jobs:
   validate:
     runs-on: ubuntu-latest
-     steps:
      - uses: actions/checkout@v3
-
      - name: Run ansible Playbook
        run: |
          cd ansible && ansible-playbook -i inventory.yml instance.yml 
