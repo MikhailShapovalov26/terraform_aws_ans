@@ -47,8 +47,8 @@ jobs:
         cd terraform && terraform apply -auto-approve -input=false
     
     - name: Upload adn Bild artifact
+    - uses: actions/checkout@v3
       with:
-        - uses: actions/checkout@v
         name: testkey.pem
         path: ./terraform/testkey.pem
         retention-days: 1
