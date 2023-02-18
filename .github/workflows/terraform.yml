@@ -51,8 +51,7 @@ jobs:
          name: testkey.pem
          path: ./terraform/testkey.pem
          retention-days: 1
-  
-jobs:
+
   run-playbooks:
     runs-on: ubuntu-latest
     steps: 
