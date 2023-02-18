@@ -1,5 +1,5 @@
 resource "aws_vpc" "network" {
-  cidr_block = "192.168.8.0/24"
+  cidr_block = "192.168.10.0/24"
   instance_tenancy = "default"
   tags = {
     "name" = "network_python"
