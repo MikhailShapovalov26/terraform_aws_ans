@@ -46,8 +46,8 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-         echo $AWS_ACCESS_KEY_ID
-         echo $AWS_SECRET_ACCESS_KEY
+         echo  ${{ secrets.AWS_ACCESS_KEY_ID }}
+         echo  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
          cd terraform && terraform plan
 
     - name: Terraform Apply
