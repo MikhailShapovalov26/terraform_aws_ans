@@ -1,0 +1,28 @@
+---
+- name: Update cache 
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+         
+- name: Upgrade all packages on servers
+  apt: 
+    name: "*"
+    state: latest
+
+- name: install package
+  apt:
+    name:
+      - curl
+      - wget
+      - git
+      - docker.io
+      - docker
+      - docker-compose
+    state: latest
+
+- name: Add user in group docker
+  user:
+    name: "{{ ansible_user }}"
+    state: present
+    groups: docker
+    append: yes
