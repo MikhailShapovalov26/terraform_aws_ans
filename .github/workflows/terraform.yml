@@ -53,7 +53,7 @@ jobs:
         path: ./terraform/testkey.pem
         retention-days: 1
 
-     - name: Run ansible Playbook
+    - name: Run ansible Playbook
        run: |
          cd ansible && ansible-playbook -i inventory.yml instance.yml 
         
