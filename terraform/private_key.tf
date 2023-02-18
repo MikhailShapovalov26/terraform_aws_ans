@@ -3,7 +3,7 @@ resource "tls_private_key" "private_key" {
   rsa_bits  = 4096
 }
 resource "aws_key_pair" "ec2_privatekey" {
-  key_name   = "python"
+  key_name   = "${uuid()}"
   public_key = tls_private_key.private_key.public_key_openssh
   provisioner "local-exec" {
     command = <<-EOT
