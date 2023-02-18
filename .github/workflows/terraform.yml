@@ -52,6 +52,6 @@ jobs:
         retention-days: 1
 
     - name: Run ansible Playbook
-       run: |
+      run: |
          cd ansible && ansible-playbook -i inventory.yml instance.yml 
         
