@@ -3,7 +3,6 @@ name: 'Terraform'
 on:
   push:
     branches: [ "master" ]
-  pull_request:
 
 permissions:
   contents: read
@@ -22,7 +21,7 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: terraform
 
 #     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
 #     - name: Setup Terraform
@@ -56,17 +55,14 @@ jobs:
         cd terraform && terraform apply -auto-approve -input=false
     
     - name: Upload adn Bild artifact
-      uses: actions/upload-artifact@v2.2.0
       with:
          name: testkey.pem
          path: ./terraform/testkey.pem
          retention-days: 1
   
   run-playbooks:
-    runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
+    - uses: ansible
     - name: Run ansible Playbook
       run: |
         cd ansible && ansible-playbook -i inventory.yml instance.yml 
