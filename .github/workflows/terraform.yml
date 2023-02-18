@@ -59,11 +59,11 @@ jobs:
       uses: actions/upload-artifact@v2.2.0
       with:
          name: testkey.pem
-         path: ./testkey.pem
+         path: ./terraform/testkey.pem
          retention-days: 1
   
   run-playbooks:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
