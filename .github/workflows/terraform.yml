@@ -54,6 +54,9 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         cd terraform && terraform apply -auto-approve -input=false
+      with:
+         name: testkey.pem
+         path: ./testkey.pem
   
   run-playbooks:
     runs-on: self-hosted
