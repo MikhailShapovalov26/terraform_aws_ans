@@ -64,6 +64,7 @@ jobs:
         cd ./inventory
         echo "inventory"
         ls -la
+        chmod 400 ./python.pem
         ansible-playbook -i inventory.yml instance.yml
       
     # - name: Deploy conteiner
