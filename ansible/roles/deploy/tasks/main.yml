@@ -1,0 +1,32 @@
+---
+- name: cloning git
+  git:
+    repo: https://github.com/RuslanSibgatulin/Webstore.git
+    dest: /home/{{ ansible_user }}
+    clone: yes
+    update: yes
+
+- name: write env file
+  linefile:
+    path: /home/{{ ansible_user }}/Webstore/docker/envs/payment.example
+    regexp: DJANGO_SECRET_KEY=
+    line: DJANGO_SECRET_KEY='{{ DJANGO_SECRET_KEY }}'
+
+- name: write env file
+  linepath:
+    path: /home/{{ ansible_user }}/Webstore/docker/envs/payment.example
+    regexp: STRIPE_PUBLIC=
+    line: STRIPE_PUBLIC='{{ STRIPE_PUBLIC }}'
+
+- name: rename env file
+  linepath:
+    path: /home/{{ ansible_user }}/Webstore/docker/envs/payment.example
+    regexp: STRIPE_SECRET=
+    line: STRIPE_SECRET='{{ STRIPE_SECRET }}'
+
+- name: edit name file
+  command: mv /home/{{ ansible_user }}/Webstore/docker/envs/payment.example /home/{{ ansible_user }}/Webstore/docker/envs/.env
+
+- name: make init
+  command: cd /home/{{ ansible_user }}/Webstore && make start && make init
+  
