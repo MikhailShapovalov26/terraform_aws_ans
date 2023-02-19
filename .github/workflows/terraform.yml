@@ -47,7 +47,7 @@ jobs:
     - name: Upload and Bild artifact
       uses: actions/upload-artifact@v3
       with:
-        name: key ssh
+        name: key
         path: ./terraform/
         retention-days: 1
     
@@ -70,6 +70,7 @@ jobs:
       run: |
         ls -R
         ls -la
+        ls -la ./key
         cd ./inventory && ansible-playbook -i inventory.yml instance.yml
       
     # - name: Deploy conteiner
