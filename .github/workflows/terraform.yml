@@ -43,7 +43,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         cd terraform && terraform apply -auto-approve -input=false
-        echo `terraform output public_dns | tr -d '"'` > ../ansible/host
+
+ # echo `terraform output public_dns | tr -d '"'` > ../ansible/host
 
     
     - name: Upload and Bild artifact
