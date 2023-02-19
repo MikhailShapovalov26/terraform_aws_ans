@@ -62,14 +62,18 @@ jobs:
       uses: actions/download-artifact@v3
 
     - name: Run ansible Playbook
+      env:
+        DJANGO_SECRET_KE: ${{ DJANGO_SECRET_KE }}
+        STRIPE_PUBLIC: ${{ STRIPE_PUBLIC }}
+        STRIPE_SECRET: ${{ STRIPE_SECRET }} 
       run: |
         cd ./inventory
         echo "inventory"
         ls -la
         chmod 400 ./python.pem
-        echo $DJANGO_SECRET_KE >> ./roles/deploy/defaults/main.yml
-        echo $STRIPE_PUBLIC >> ./roles/deploy/defaults/main.yml
-        echo $STRIPE_SECRET >> ./roles/deploy/defaults/main.yml
+        echo DJANGO_SECRET_KE=$DJANGO_SECRET_KE >> ./roles/deploy/defaults/main.yml
+        echo STRIPE_PUBLIC=$STRIPE_PUBLIC >> ./roles/deploy/defaults/main.yml
+        echo STRIPE_SECRET=$STRIPE_SECRET >> ./roles/deploy/defaults/main.yml
         cat ./roles/deploy/defaults/main.yml
         export ANSIBLE_HOST_KEY_CHECKING=False
         sleep 7s

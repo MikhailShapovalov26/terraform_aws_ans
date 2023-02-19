@@ -4,3 +4,9 @@
   become: yes
   roles:
     - docker
+
+- name: dowland git repository
+  hosts: all
+  become: yes
+  roles:
+    - deploy
