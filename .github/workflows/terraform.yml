@@ -71,7 +71,11 @@ jobs:
         ls -R
         ls -la
         ls -la ./key
-        cd ./inventory && ansible-playbook -i inventory.yml instance.yml
+        cd ./inventory
+        echo "inventory"
+        ls -la
+        cat ../key/python.pem
+        ansible-playbook -i inventory.yml instance.yml
       
     # - name: Deploy conteiner
     #   run: |
