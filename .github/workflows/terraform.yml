@@ -43,6 +43,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         cd terraform && terraform apply -auto-approve -input=false
+        echo `terraform output public_dns | tr -d '"'` > ../ansible/host
+
     
     - name: Upload and Bild artifact
       uses: actions/upload-artifact@v3
@@ -65,16 +67,28 @@ jobs:
         echo "inventory"
         ls -la
         chmod 400 ./python.pem
+        echo $DJANGO_SECRET_KE >> ./roles/deploy/defaults/main.yml
+        echo $STRIPE_PUBLIC >> ./roles/deploy/defaults/main.yml
+        echo $STRIPE_SECRET >> ./roles/deploy/defaults/main.yml
+        cat ./roles/deploy/defaults/main.yml
         export ANSIBLE_HOST_KEY_CHECKING=False
         sleep 7s
         ansible-playbook -i inventory.yml instance.yml
-      
-    # - name: Deploy conteiner
-    #   run: |
-    #         cd terraform && export HOST=`terraform output public_dns | tr -d '"'`
-    #         ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST " git clone https://github.com/RuslanSibgatulin/Webstore.git"
-    #         ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "sudo apt-get install -y build-essential"
-    #         # ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "cd Webstore && make init  && make loaddata"
+  
+  # deploy:
+  #   name: deploy
+  #   runs-on: ubuntu-latest
+  #   needs: [terraform-job, ansible-job ]
+
+  #   - name: checkout
+  #     uses: actions/download-artifact@v3
+
+  #   - name: Deploy conteiner
+  #     run: |
+  #           cd ./inventory && export HOST=`cat host`
+  #           ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST " git clone https://github.com/RuslanSibgatulin/Webstore.git"
+  #           ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "sudo apt-get install -y build-essential"
+  #           # ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "cd Webstore && make init  && make loaddata"
 
 
 
