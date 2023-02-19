@@ -1,6 +1,5 @@
 resource "aws_security_group" "ssh_security" {
   name   = "ssh"
-  vpc_id = aws_vpc.network.id
   ingress {
     from_port   = 22
     to_port     = 22
@@ -16,7 +15,6 @@ resource "aws_security_group" "ssh_security" {
 }
 resource "aws_security_group" "http_security" {
   name   = "http"
-  vpc_id = aws_vpc.network.id
   ingress {
     from_port   = 80
     to_port     = 80

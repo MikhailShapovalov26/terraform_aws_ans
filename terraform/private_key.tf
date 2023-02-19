@@ -7,10 +7,10 @@ resource "aws_key_pair" "ec2_privatekey" {
   public_key = tls_private_key.private_key.public_key_openssh
   provisioner "local-exec" {
     command = <<-EOT
-    echo '${tls_private_key.private_key.private_key_pem}' > ./testkey.pem
-    echo '${tls_private_key.private_key.public_key_openssh}' > ./testpub.pub
-    chmod 600 ./testkey.pem
-    chmod 600 ./testpub.pub
+    echo '${tls_private_key.private_key.private_key_pem}' > ./python.pem
+    echo '${tls_private_key.private_key.public_key_openssh}' > ./python.pub
+    chmod 400 ./python.pem
+    chmod 400 ./python.pub
     EOT    
   }
 }

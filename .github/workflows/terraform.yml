@@ -44,14 +44,31 @@ jobs:
       run: |
         cd terraform && terraform apply -auto-approve -input=false
     
-    - name: Upload adn Bild artifact
+    - name: Upload and Bild artifact
       uses: actions/checkout@v3
       with:
         name: testkey.pem
-        path: ./terraform/testkey.pem
+        path: ./terraform/python.pem
+        retention-days: 1
+    
+    - name: Upload and Bild artifact
+      uses: actions/checkout@v3
+      with:
+        name: testkey.pem
+        path: ./ansible/inventory.yml
         retention-days: 1
 
     - name: Run ansible Playbook
       run: |
-         cd ansible && ansible-playbook -i inventory.yml instance.yml 
+         cd ansible && ansible-playbook -i inventory.yml instance.yml
+      
+    - name: Deploy conteiner
+      run: |
+      cd terraform && export HOST=`terraform output public_dns | tr -d '"'`
+      ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST " git clone https://github.com/RuslanSibgatulin/Webstore.git"
+      ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "sudo apt-get install -y build-essential"
+      # ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "cd Webstore && make init  && make loaddata"
+
+
+
         
