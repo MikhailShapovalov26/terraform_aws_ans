@@ -47,13 +47,6 @@ jobs:
     - name: Upload and Bild artifact
       uses: actions/upload-artifact@v3
       with:
-        name: key
-        path: ./terraform/
-        retention-days: 1
-    
-    - name: Upload and Bild artifact
-      uses: actions/upload-artifact@v3
-      with:
         name: inventory
         path: ./ansible/
         retention-days: 1
@@ -71,7 +64,6 @@ jobs:
         cd ./inventory
         echo "inventory"
         ls -la
-        chmod 400 ../key/python.pem
         ansible-playbook -i inventory.yml instance.yml
       
     # - name: Deploy conteiner
