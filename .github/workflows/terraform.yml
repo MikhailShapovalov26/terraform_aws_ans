@@ -68,9 +68,9 @@ jobs:
         echo "inventory"
         ls -la
         echo '---' > ./roles/deploy/defaults/main.yml
-        echo DJANGO_SECRET_KEY=${{ vars.DJANGO_SECRET_KEY }} >> ./roles/deploy/defaults/main.yml
-        echo STRIPE_PUBLIC=${{ STRIPE_PUBLIC }} >> ./roles/deploy/defaults/main.yml
-        echo STRIPE_SECRET=${{ STRIPE_SECRET }} >> ./roles/deploy/defaults/main.yml
+        echo "DJANGO_SECRET_KEY=${{ vars.DJANGO_SECRET_KEY }}" >> ./roles/deploy/defaults/main.yml
+        echo "STRIPE_PUBLIC=${{ vars.STRIPE_PUBLIC }}" >> ./roles/deploy/defaults/main.yml
+        echo "STRIPE_SECRET=${{ vars.STRIPE_SECRET }}" >> ./roles/deploy/defaults/main.yml
         chmod 400 ./python.pem
         cat ./roles/deploy/defaults/main.yml
         export ANSIBLE_HOST_KEY_CHECKING=False
