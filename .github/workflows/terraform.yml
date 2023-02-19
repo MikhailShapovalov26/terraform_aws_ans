@@ -64,10 +64,10 @@ jobs:
       
     - name: Deploy conteiner
       run: |
-      cd terraform && export HOST=`terraform output public_dns | tr -d '"'`
-      ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST " git clone https://github.com/RuslanSibgatulin/Webstore.git"
-      ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "sudo apt-get install -y build-essential"
-      # ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "cd Webstore && make init  && make loaddata"
+            cd terraform && export HOST=`terraform output public_dns | tr -d '"'`
+            ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST " git clone https://github.com/RuslanSibgatulin/Webstore.git"
+            ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "sudo apt-get install -y build-essential"
+            # ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "cd Webstore && make init  && make loaddata"
 
 
 
