@@ -67,8 +67,10 @@ jobs:
       uses: actions/download-artifact@v3
 
     - name: Run ansible Playbook
-      run: ls -R
-         cd ./inventory && ls -la && ansible-playbook -i inventory.yml instance.yml
+      run: |
+        ls -R
+        ls -la
+        cd ./inventory && ansible-playbook -i inventory.yml instance.yml
       
     # - name: Deploy conteiner
     #   run: |
