@@ -55,6 +55,7 @@ jobs:
   
   ansible-job:
     name: ansible playbok
+    environment: production
     runs-on: ubuntu-latest
     needs: terraform-job
     steps:
