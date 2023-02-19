@@ -7,7 +7,7 @@
             ansible_connection: ssh
             ansible_host: ${aws_instance.bucket_python.public_dns}
             ansible_user: ubuntu
-            ansible_private_key_file: ../terraform/python.pem
+            ansible_private_key_file: ../key/python.pem
     DOC
   filename = "../ansible/inventory.yml"
 }
