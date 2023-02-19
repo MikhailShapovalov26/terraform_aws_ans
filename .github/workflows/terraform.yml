@@ -60,7 +60,7 @@ jobs:
 
     - name: Run ansible Playbook
       run: |
-         cd ansible && ls -la && ansible-playbook -i inventory.yml instance.yml
+         cd ansible && ls -la && cat inventory.yml && ansible-playbook -i inventory.yml instance.yml
       
     - name: Deploy conteiner
       run: |
