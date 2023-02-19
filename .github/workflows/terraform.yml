@@ -44,9 +44,6 @@ jobs:
       run: |
         cd terraform && terraform apply -auto-approve -input=false
 
- # echo `terraform output public_dns | tr -d '"'` > ../ansible/host
-
-    
     - name: Upload and Bild artifact
       uses: actions/upload-artifact@v3
       with:
@@ -69,11 +66,11 @@ jobs:
         echo "inventory"
         ls -la
         echo '---' > ./roles/deploy/defaults/main.yml
-        echo "DJANGO_SECRET_KEY=${{ vars.DJANGO_SECRET_KEY }}" >> ./roles/deploy/defaults/main.yml
-        echo "STRIPE_PUBLIC=${{ vars.STRIPE_PUBLIC }}" >> ./roles/deploy/defaults/main.yml
-        echo "STRIPE_SECRET=${{ vars.STRIPE_SECRET }}" >> ./roles/deploy/defaults/main.yml
-        chmod 400 ./python.pem
+        echo DJANGO_SECRET_KEY=${{ vars.DJANGO_SECRET_KEY }} >> ./roles/deploy/defaults/main.yml
+        echo STRIPE_PUBLIC=${{ vars.STRIPE_PUBLIC }} >> ./roles/deploy/defaults/main.yml
+        echo STRIPE_SECRET=${{ vars.STRIPE_SECRET }} >> ./roles/deploy/defaults/main.yml
         cat ./roles/deploy/defaults/main.yml
+        chmod 400 ./python.pem
         export ANSIBLE_HOST_KEY_CHECKING=False
         sleep 7s
         ansible-playbook -i inventory.yml instance.yml
@@ -92,7 +89,3 @@ jobs:
   #           ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST " git clone https://github.com/RuslanSibgatulin/Webstore.git"
   #           ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "sudo apt-get install -y build-essential"
   #           # ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "cd Webstore && make init  && make loaddata"
-
-
-
-        
