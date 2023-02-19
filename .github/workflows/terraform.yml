@@ -63,9 +63,9 @@ jobs:
 
     - name: Run ansible Playbook
       env:
-        DJANGO_SECRET_KE: ${{ DJANGO_SECRET_KE }}
-        STRIPE_PUBLIC: ${{ STRIPE_PUBLIC }}
-        STRIPE_SECRET: ${{ STRIPE_SECRET }} 
+        DJANGO_SECRET_KE: ${{ secrets.DJANGO_SECRET_KE }}
+        STRIPE_PUBLIC: ${{ secrets.STRIPE_PUBLIC }}
+        STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }} 
       run: |
         cd ./inventory
         echo "inventory"
