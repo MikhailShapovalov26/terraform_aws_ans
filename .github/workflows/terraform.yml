@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  terraform:
+  terraform-job:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
@@ -37,37 +37,45 @@ jobs:
       run: |
          cd terraform && terraform plan
 
-    # - name: Terraform Apply
-    #   env:
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #   run: |
-    #     cd terraform && terraform apply -auto-approve -input=false
+    - name: Terraform Apply
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        cd terraform && terraform apply -auto-approve -input=false
     
     - name: Upload and Bild artifact
-      uses: actions/checkout@v3
+      uses: actions/upload-artifact@v3
       with:
-        name: testkey.pem
-        path: ./terraform/python.pem
+        name: key ssh
+        path: ./terraform/
         retention-days: 1
     
     - name: Upload and Bild artifact
-      uses: actions/checkout@v3
+      uses: actions/upload-artifact@v3
       with:
-        name: testkey.pem
-        path: ./ansible/inventory.yml
+        name: inventory
+        path: ./ansible/
         retention-days: 1
+  
+  ansible-job:
+    name: ansible playbok
+    runs-on: ubuntu-latest
+    needs: ansible
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
 
     - name: Run ansible Playbook
       run: |
          cd ansible && ls -la && ls inventory.yml && ansible-playbook -i inventory.yml instance.yml
       
-    - name: Deploy conteiner
-      run: |
-            cd terraform && export HOST=`terraform output public_dns | tr -d '"'`
-            ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST " git clone https://github.com/RuslanSibgatulin/Webstore.git"
-            ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "sudo apt-get install -y build-essential"
-            # ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "cd Webstore && make init  && make loaddata"
+    # - name: Deploy conteiner
+    #   run: |
+    #         cd terraform && export HOST=`terraform output public_dns | tr -d '"'`
+    #         ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST " git clone https://github.com/RuslanSibgatulin/Webstore.git"
+    #         ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "sudo apt-get install -y build-essential"
+    #         # ssh -i "python.pem" -o StrictHostKeyChecking=no ubuntu@$HOST "cd Webstore && make init  && make loaddata"
 
 
 
