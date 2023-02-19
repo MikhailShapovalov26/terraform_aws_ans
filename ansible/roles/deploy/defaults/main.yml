@@ -1,0 +1,5 @@
+        # echo '---' > ./roles/deploy/defaults/main.yml
+        # echo DJANGO_SECRET_KEY=${{ vars.DJANGO_SECRET_KEY }} >> ./roles/deploy/defaults/main.yml
+        # echo STRIPE_PUBLIC=${{ vars.STRIPE_PUBLIC }} >> ./roles/deploy/defaults/main.yml
+        # echo STRIPE_SECRET=${{ vars.STRIPE_SECRET }} >> ./roles/deploy/defaults/main.yml
+        # cat ./roles/deploy/defaults/main.yml
