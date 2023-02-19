@@ -65,6 +65,8 @@ jobs:
         echo "inventory"
         ls -la
         chmod 400 ./python.pem
+        export ANSIBLE_HOST_KEY_CHECKING=False
+        sllep 7s
         ansible-playbook -i inventory.yml instance.yml
       
     # - name: Deploy conteiner
