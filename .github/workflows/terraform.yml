@@ -68,13 +68,10 @@ jobs:
 
     - name: Run ansible Playbook
       run: |
-        ls -R
-        ls -la
-        ls -la ./key
         cd ./inventory
         echo "inventory"
         ls -la
-        cat ../key/python.pem
+        chmod 400 ../key/python.pem
         ansible-playbook -i inventory.yml instance.yml
       
     # - name: Deploy conteiner
