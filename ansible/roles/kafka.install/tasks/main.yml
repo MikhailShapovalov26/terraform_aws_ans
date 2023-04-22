@@ -1,0 +1,89 @@
+---
+- name: update system
+  apt: 
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: upgrade all packages
+  apt: 
+    name: "*"
+    state: latest
+
+- name: check file 
+  shell: if [[ -d /tmp/kafka_2.12-{{ version_kafka }}.tgz ]]; then echo "true"; fi
+  register: file_check_kafka
+
+- name: install Java OpenJDK 11
+  apt: 
+     name: default-jdk
+     state: latest
+
+- name: create user kafka
+  user:
+    name: kafka 
+    state: present 
+    shell: /bin/false
+    create_home: false 
+
+- name: Dowland packer kafka https://dlcdn.apache.org/kafka/{{ version_kafka }}/kafka_2.12-{{ version_kafka }}.tgz
+  get_url:
+    url: https://dlcdn.apache.org/kafka/{{ version_kafka }}/kafka_2.12-{{ version_kafka }}.tgz
+    dest: /tmp/
+    # checksum: "sha512:https://dlcdn.apache.org/kafka/{{ version_kafka }}/kafka_2.12-{{ version_kafka }}.tgz.sha512"
+  when: file_check_kafka.stdout == "true"
+
+- name: extract the file kafka
+  unarchive:
+    src: /tmp/kafka_2.12-{{ version_kafka }}.tgz
+    dest: /opt/
+    remote_src: yes
+  when: file_check_kafka.stdout == "true"
+
+- name: MV catalog
+  command: mv /opt/kafka_2.12-{{ version_kafka }} /opt/kafka
+  when: file_check_kafka.stdout == "true"
+
+- name: Create directory ownership  kafka
+  file:
+    path: /opt/kafka/logs
+    state: directory
+  when: file_check_kafka.stdout == "true"
+
+- name: Default location for Apache Kafka logs to the directory
+  lineinfile:
+    path: /opt/kafka/config/server.properties
+    regexp: 'log.dirs='
+    line: 'log.dirs=/opt/kafka/logs'
+  when: file_check_kafka.stdout == "true"
+
+- name: copy config files 
+  template:
+    src: kafka.service.j2
+    dest: /etc/systemd/system/kafka.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy config file 
+  template:
+    src: zookeeper.service.j2
+    dest: /etc/systemd/system/zookeeper.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: systemd reload
+  systemd:
+    daemon_reload: True
+
+- name: kafka and zookeeper systemctl enable and start
+  systemd:
+    name: zookeeper
+    state: started
+    enabled: true
+
+- name: kafka and zookeeper systemctl enable and start
+  systemd:
+    name: kafka
+    state: started
+    enabled: true

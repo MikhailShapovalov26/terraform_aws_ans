@@ -18,6 +18,7 @@
       - docker.io
       - docker
       - docker-compose
+      - make
     state: latest
 
 - name: Add user in group docker

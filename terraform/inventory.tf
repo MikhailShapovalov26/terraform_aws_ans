@@ -3,9 +3,9 @@
   ---
     targets:
        hosts:
-         ${aws_instance.bucket_python.private_ip}:
+         ${module.aws_instance.private_ip}:
             ansible_connection: ssh
-            ansible_host: ${aws_instance.bucket_python.public_dns}
+            ansible_host: ${module.aws_instance.public_dns}
             ansible_user: ubuntu
             ansible_private_key_file: ./python.pem
     DOC
