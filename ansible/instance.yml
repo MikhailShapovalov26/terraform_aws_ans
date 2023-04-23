@@ -11,7 +11,7 @@
 #   roles:
 #     - deploy
 
-- name: Masquerade
+- name: APACHE.KAFKA
   hosts: all
   become: yes
   roles:

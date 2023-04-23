@@ -3,7 +3,7 @@
   ---
     targets:
        hosts:
-         ${module.aws_instance.private_ip}:
+        ${module.aws_instance.private_ip}:
             ansible_connection: ssh
             ansible_host: ${module.aws_instance.public_dns}
             ansible_user: ubuntu

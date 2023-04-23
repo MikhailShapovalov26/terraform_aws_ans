@@ -9,8 +9,8 @@
     name: "*"
     state: latest
 
-- name: check file 
-  shell: if [[ -d /tmp/kafka_2.12-{{ version_kafka }}.tgz ]]; then echo "true"; fi
+- name: check kafka file for skipp step 
+  stat: path=/tmp/kafka_2.12-{{ version_kafka }}.tgz
   register: file_check_kafka
 
 - name: install Java OpenJDK 11
@@ -30,33 +30,38 @@
     url: https://dlcdn.apache.org/kafka/{{ version_kafka }}/kafka_2.12-{{ version_kafka }}.tgz
     dest: /tmp/
     # checksum: "sha512:https://dlcdn.apache.org/kafka/{{ version_kafka }}/kafka_2.12-{{ version_kafka }}.tgz.sha512"
-  when: file_check_kafka.stdout == "true"
+  when: not file_check_kafka.stat.exists
 
 - name: extract the file kafka
   unarchive:
     src: /tmp/kafka_2.12-{{ version_kafka }}.tgz
-    dest: /opt/
+    dest: '{{ kafka_path }}'
     remote_src: yes
-  when: file_check_kafka.stdout == "true"
+  when: not file_check_kafka.stat.exists
 
 - name: MV catalog
-  command: mv /opt/kafka_2.12-{{ version_kafka }} /opt/kafka
-  when: file_check_kafka.stdout == "true"
+  command: mv {{ kafka_path }}/kafka_2.12-{{ version_kafka }} /opt/kafka
+  when: not file_check_kafka.stat.exists
 
 - name: Create directory ownership  kafka
   file:
-    path: /opt/kafka/logs
+    path: '{{ kafka_path }}/kafka/logs'
     state: directory
-  when: file_check_kafka.stdout == "true"
+  when: not file_check_kafka.stat.exists
 
 - name: Default location for Apache Kafka logs to the directory
   lineinfile:
-    path: /opt/kafka/config/server.properties
+    path: '{{ kafka_path }}/kafka/config/server.properties'
     regexp: 'log.dirs='
     line: 'log.dirs=/opt/kafka/logs'
-  when: file_check_kafka.stdout == "true"
+  when: not file_check_kafka.stat.exists
 
-- name: copy config files 
+- name: Create directory ownership  kafka/zookeepe for cluster
+  file:
+    path: '{{ kafka_path }}/kafka/zookeeper'
+    state: directory
+
+- name: Copy config template kafka.service
   template:
     src: kafka.service.j2
     dest: /etc/systemd/system/kafka.service
@@ -64,10 +69,34 @@
     group: root
     mode: 0644
 
-- name: copy config file 
+- name: Copy config template zookeeper.service
   template:
     src: zookeeper.service.j2
     dest: /etc/systemd/system/zookeeper.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy template myid
+  template:
+    src: myid.j2
+    dest: '{{ kafka_path }}/kafka/zookeeper/myid'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy template zookeeper.properties
+  template:
+    src: zookeeper.properties.j2
+    dest: '{{ kafka_path }}/kafka/config/zookeeper.properties'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy template server.properties
+  template:
+    src: server.properties.j2
+    dest: '{{ kafka_path }}/kafka/config/server.properties'
     owner: root
     group: root
     mode: 0644
